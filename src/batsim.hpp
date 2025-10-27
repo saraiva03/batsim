@@ -60,18 +60,11 @@ struct MainArguments
        std::string name;            //!< The name of the eventList
    };
 
-   struct CarbonIntensityTraces 
-   {
-       std::string host_id;                     //!< Host id
-       std::map<std::string, double> intensities;     //!< Timestamp to carbon rate mapping
-   };
-
     // Input
     std::string platform_filename;                          //!< The SimGrid platform filename
     std::list<WorkloadDescription> workload_descriptions;   //!< The workloads descriptions
     std::list<WorkflowDescription> workflow_descriptions;   //!< The workflows descriptions
     std::list<EventListDescription> eventList_descriptions; //!< The descriptions of the eventLists
-    std::list<CarbonIntensityTraces> carbon_intensities;       //!< The descriptions of the carbon footprint trace files
     
     // Common
     std::string master_host_name;                           //!< The name of the SimGrid host which runs scheduler processes and not user tasks

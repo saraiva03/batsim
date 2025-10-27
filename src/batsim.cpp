@@ -46,7 +46,6 @@
 #include "batsim.hpp"
 #include "context.hpp"
 #include "event_submitter.hpp"
-#include "carbon_updater.hpp"
 #include "events.hpp"
 #include "export.hpp"
 #include "ipp.hpp"
@@ -457,19 +456,9 @@ Other options:
             error = true; 
             return;  
         } else {
-            auto carbon_intensities = load_carbon_trace_file(main_args.carbon_footprint_trace_file);
-
-            for (const auto &entry : carbon_intensities) {
-                MainArguments::CarbonIntensityTraces desc;
-                desc.host_id = entry.first;
-                desc.intensities = entry.second;
-                main_args.carbon_intensities.push_back(desc);
-
-            }  
             main_args.carbon_footprint_used = true;
             XBT_INFO("Carbon footprint mode: DYNAMIC activated with trace file '%s'",
                     main_args.carbon_footprint_trace_file.c_str());   
-
         }   
     }
 
@@ -771,22 +760,7 @@ void start_initial_simulation_processes(const MainArguments & main_args,
         XBT_INFO("The process '%s' has been created.", submitter_instance_name.c_str());
     }
 
-    // Let's run a carbon_updater process for each host
-    if (main_args.carbon_footprint_used && main_args.carbon_footprint_trace_file != "None"){
-        for (const MainArguments::CarbonIntensityTraces & desc : main_args.carbon_intensities) 
-        {
-            auto host = simgrid::s4u::Host::by_name(desc.host_id);
-            if (host) {
-                std::string actor_name = "carbon_updater_" + desc.host_id;
-                auto actor_function = carbon_updater_actor_for_host;
-                simgrid::s4u::Actor::create(actor_name.c_str(), host,
-                                            actor_function, desc.host_id, desc.intensities);
-                XBT_DEBUG("Carbon updater actor '%s' created for host '%s'.", actor_name.c_str(), desc.host_id.c_str());
-            } else {
-                XBT_INFO("Host '%s' not found in the platform. Skipping.", desc.host_id.c_str());
-            }
-        }
-    }
+    // Carbon footprint updates are now handled directly by the SimGrid plugin
 
     if (!is_batexec)
     {
@@ -857,6 +831,11 @@ int main(int argc, char * argv[])
     {
         main_args.energy_used = true;
         sg_host_carbon_footprint_plugin_init();
+        
+        // Load trace file if dynamic mode is enabled
+        if (!main_args.carbon_footprint_trace_file.empty() && main_args.carbon_footprint_trace_file != "None") {
+            sg_host_carbon_footprint_load_trace_file(main_args.carbon_footprint_trace_file.c_str());
+        }
     }
 
     // Instantiate SimGrid
