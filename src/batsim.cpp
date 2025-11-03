@@ -198,7 +198,7 @@ Most common options:
                                      outputs energy-related files.
   -C, --carbon-footprint             Enables the fixed carbon footprint mode.
   --carbon-footprint-dynamic <trace_file>  Enables the dynamic carbon footprint mode
-                                     The trace file contains carbon intensity for each host and timestamp. [default: None].
+                                     The trace file contains carbon intensity for each host and timestamp.
                                      
 Execution context options:
   -s, --socket-endpoint <endpoint>   The Decision process socket endpoint
