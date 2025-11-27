@@ -15,8 +15,8 @@
 , simgrid ? kapack.simgrid-light.overrideAttrs(old: {
     src = kapack.pkgs.fetchgit {
       url = "https://github.com/saraiva03/simgrid.git";
-      rev = "0585e2c6c82a685f03dd6f1099aa6a8e0f57bdc8"; 
-      sha256 = "VAEwr6dnWziYimLFWe3LLwDZJIXosjvWs+9kz2begNE="; 
+      rev = "0782c519526cfef8115fd02c3d10afa68b747021"; 
+      sha256 = "bNMylgWW/i4xK020qi7CNML9s/RSQ1eoDGqRGV+5B+E="; 
     };
   })
 , batsched ? kapack.batsched.overrideAttrs (old: {
